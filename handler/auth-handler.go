@@ -31,17 +31,17 @@ func NewAuthHandler(service service.AuthService, jwtService service.JWTService) 
 }
 
 // Login godoc
-// @Summary Login accounts
-// @Description Login accounts
+// @Summary Login user
+// @Description Login user
 // @Tags auth
 // @Accept  json
 // @Produce  json
 // @param register body dto.LoginDTO true "request body login"
 // @Success 200 {object} helper.Response
 // @Failure 400 {object} helper.Response
-// @Failure 404 {object} helper.Response
+// @Failure 401 {object} helper.Response
 // @Failure 500 {object} helper.Response
-// @Router /auth/login [post]
+// @Router /login [post]
 func (c *AuthHandler) Login(ctx echo.Context) (err error) {
 	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 

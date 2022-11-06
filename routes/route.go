@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/devnura/pre-tets-devnura/config"
+	_ "github.com/devnura/pre-tets-devnura/docs"
 	"github.com/devnura/pre-tets-devnura/handler"
 	"github.com/devnura/pre-tets-devnura/helper"
 	_middleware "github.com/devnura/pre-tets-devnura/middleware"
@@ -12,6 +13,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 func SetupLogger(e *echo.Echo) {
@@ -61,20 +64,12 @@ func SetupRoute(e *echo.Echo) {
 		})
 	})
 
-	g := e.Group("/api/v1/auth")
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
+	v1 := e.Group("/api/v1")
 	{
-		g.POST("/login", authHandler.Login)
-	}
-
-	secure := e.Group("/api/v1")
-	{
-		// secure.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		// 	Claims:     &jwt.StandardClaims{},
-		// 	SigningKey: []byte("secret"),
-		// }))
-
-		secure.GET("/profile", userHandler.Profile, _middleware.IsLoggedIn)
-
+		v1.POST("/login", authHandler.Login)
+		v1.GET("/profile", userHandler.Profile, _middleware.IsLoggedIn)
 	}
 
 	e.Use(middleware.Logger())
