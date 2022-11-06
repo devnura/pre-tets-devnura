@@ -67,7 +67,39 @@ paths:
       summary: Login user
       tags:
       - auth
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Profile user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Profile user
+      tags:
+      - accounts
 securityDefinitions:
-  Beared:
-    type: basic
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

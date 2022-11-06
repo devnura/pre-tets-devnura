@@ -20,7 +20,9 @@ import (
 // @host      localhost:8080
 // @BasePath  /api/v1
 
-// @securityDefinitions.basic  Beared
+// @securityDefinitions.apiKey JWT
+// @in header
+// @name Authorization
 
 func main() {
 	var server = echo.New()
