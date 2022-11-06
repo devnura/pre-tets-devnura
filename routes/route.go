@@ -74,6 +74,7 @@ func SetupRoute(e *echo.Echo) {
 		v1.POST("/login", authHandler.Login)
 		v1.GET("/profile", userHandler.Profile, _middleware.IsLoggedIn)
 		v1.GET("/question", questionHandler.All, _middleware.IsLoggedIn)
+		v1.GET("/question/:id", questionHandler.FindById, _middleware.IsLoggedIn)
 	}
 
 	e.Use(middleware.Logger())

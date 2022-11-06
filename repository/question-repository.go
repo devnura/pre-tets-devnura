@@ -30,20 +30,20 @@ func (db *questionConnection) FindById(questionID uint64) entity.Question {
 }
 
 func (db *questionConnection) AllQuestion() []entity.Question {
-	var entity []entity.Question
-	db.connection.Raw("SELECT questions.id, question, users.* FROM questions LEFT JOIN users ON users.id = questions.user_id ").Scan(&entity)
-	return entity
+	var question []entity.Question
+	db.connection.Preload("Answer").Find(&question)
+	return question
 }
 
 func (db *questionConnection) InsertQuestion(b entity.Question) entity.Question {
 	db.connection.Save(&b)
-	db.connection.Preload("User").Find(&b)
+	db.connection.Preload("Answer").Find(&b)
 	return b
 }
 
 func (db *questionConnection) UpdateQuestion(b entity.Question) entity.Question {
 	db.connection.Save(&b)
-	db.connection.Preload("User").Find(&b)
+	db.connection.Preload("Answer").Find(&b)
 	return b
 }
 
