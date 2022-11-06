@@ -10,6 +10,7 @@ import (
 
 type JWTService interface {
 	GenerateToken(userID string) string
+	// GetUserId(token string) string
 	ValidateToken(token string) (*jwt.Token, error)
 }
 

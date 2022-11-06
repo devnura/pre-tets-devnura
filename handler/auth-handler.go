@@ -18,19 +18,19 @@ import (
 // 	Login(ctx echo.Context)
 // }
 
-type authHandler struct {
+type AuthHandler struct {
 	authService service.AuthService
 	jwtService  service.JWTService
 }
 
-func NewAuthHandler(authService service.AuthService, jwtService service.JWTService) *authHandler {
-	return &authHandler{
-		authService: authService,
+func NewAuthHandler(service service.AuthService, jwtService service.JWTService) *AuthHandler {
+	return &AuthHandler{
+		authService: service,
 		jwtService:  jwtService,
 	}
 }
 
-func (c *authHandler) Login(ctx echo.Context) (err error) {
+func (c *AuthHandler) Login(ctx echo.Context) (err error) {
 	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	validate := validator.New()

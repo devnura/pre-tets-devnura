@@ -58,8 +58,8 @@ func NewMysqlDB() *gorm.DB {
 	// migrate table
 	db.AutoMigrate(
 		&entity.User{},
-		// &entity.Answer{},
-		// &entity.Question{},
+		&entity.Answer{},
+		&entity.Question{},
 	)
 
 	seedData(db)

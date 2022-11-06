@@ -9,6 +9,7 @@ import (
 
 type UserRepository interface {
 	VerifyCredential(email string, password string) interface{}
+	ProfileUser(id string) entity.User
 }
 
 type userConnection struct {
@@ -28,5 +29,11 @@ func (db *userConnection) VerifyCredential(email string, password string) interf
 		log.Printf("%v", res.Error)
 		return nil
 	}
+	return user
+}
+
+func (db *userConnection) ProfileUser(userID string) entity.User {
+	var user entity.User
+	db.connection.Preload("Question").Preload("Question.User").Find(&user, userID)
 	return user
 }
