@@ -36,11 +36,11 @@ func NewAuthHandler(service service.AuthService, jwtService service.JWTService) 
 // @Tags auth
 // @Accept  json
 // @Produce  json
-// @param register body LoginDTO true "request body login"
-// @Success 200 {object} LoginResponseDOC
-// @Failure 400 {object} res.ErrorResponse
-// @Failure 404 {object} res.ErrorResponse
-// @Failure 500 {object} res.ErrorResponse
+// @param register body dto.LoginDTO true "request body login"
+// @Success 200 {object} helper.Response
+// @Failure 400 {object} helper.Response
+// @Failure 404 {object} helper.Response
+// @Failure 500 {object} helper.Response
 // @Router /auth/login [post]
 func (c *AuthHandler) Login(ctx echo.Context) (err error) {
 	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
