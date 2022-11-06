@@ -1,8 +1,7 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/devnura/pre-tets-devnura/routes"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,11 +16,13 @@ type EmptyObj struct {
 }
 
 func main() {
-	e := echo.New()
+	var server = echo.New()
 
-	e.GET("/", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, Response{Code: 200, Message: "Hello World!"})
-	})
+	routes.SetupLogger(server)
+	// routes.SetupGlobalErrorHandler(server)
+	routes.SetupMiddleware(server)
+	routes.SetupRoute(server)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	server.Logger.Fatal(server.Start(":8080"))
+
 }
