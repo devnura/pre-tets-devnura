@@ -38,21 +38,24 @@ func SetupRoute(e *echo.Echo) {
 	var (
 		gormDB = config.NewMysqlDB()
 
-		userRepo repository.UserRepository = repository.NewUserRepository(gormDB)
+		userRepo     repository.UserRepository     = repository.NewUserRepository(gormDB)
+		questionRepo repository.QuestionRepository = repository.NewQuestionRepository(gormDB)
 	)
 
 	// service
 	var (
 		jwtService = service.NewJWTService()
 
-		authService = service.NewAuthService(userRepo)
-		userService = service.NewUserService(userRepo)
+		authService     = service.NewAuthService(userRepo)
+		userService     = service.NewUserService(userRepo)
+		questionService = service.NewQuestionService(questionRepo)
 	)
 
 	// handler
 	var (
-		authHandler = handler.NewAuthHandler(authService, jwtService)
-		userHandler = handler.NewUserHandler(userService)
+		authHandler     = handler.NewAuthHandler(authService, jwtService)
+		userHandler     = handler.NewUserHandler(userService)
+		questionHandler = handler.NewQuestionHandler(questionService)
 	)
 
 	e.GET("/", func(c echo.Context) error {
@@ -70,6 +73,7 @@ func SetupRoute(e *echo.Echo) {
 	{
 		v1.POST("/login", authHandler.Login)
 		v1.GET("/profile", userHandler.Profile, _middleware.IsLoggedIn)
+		v1.GET("/question", questionHandler.All, _middleware.IsLoggedIn)
 	}
 
 	e.Use(middleware.Logger())
