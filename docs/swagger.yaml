@@ -10,6 +10,13 @@ definitions:
     - email
     - password
     type: object
+  dto.QuestionRequestDTO:
+    properties:
+      question:
+        type: string
+    required:
+    - question
+    type: object
   helper.Response:
     properties:
       coce:
@@ -127,11 +134,53 @@ paths:
       summary: Question
       tags:
       - question
+    post:
+      consumes:
+      - application/json
+      description: Question Insert
+      parameters:
+      - description: request body insert question
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.QuestionRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Question Insert
+      tags:
+      - question
   /question/{id}:
     get:
       consumes:
       - application/json
       description: Question By ID
+      parameters:
+      - description: Id Question
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

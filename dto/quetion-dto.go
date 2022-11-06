@@ -7,6 +7,9 @@ type QuestionUpdateDTO struct {
 }
 
 type QuestionCreateDTO struct {
-	Question string `json:"question"`
-	UserID   string `json:"userId"`
+	Question string `json:"question" validate:"required"`
+	UserID   uint64 `json:"userId"`
+}
+type QuestionRequestDTO struct {
+	Question string `json:"question" validate:"required"`
 }

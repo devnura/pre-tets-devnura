@@ -31,7 +31,7 @@ func (db *questionConnection) FindById(questionID uint64) entity.Question {
 
 func (db *questionConnection) AllQuestion() []entity.Question {
 	var question []entity.Question
-	db.connection.Preload("Answer").Find(&question)
+	db.connection.Find(&question)
 	return question
 }
 
