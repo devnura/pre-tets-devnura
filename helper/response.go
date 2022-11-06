@@ -4,7 +4,7 @@ import "strings"
 
 //Response struct json
 type Response struct {
-	Status  bool        `json:"status"`
+	Code    int         `json:"coce"`
 	Message string      `json:"message"`
 	Error   interface{} `json:"error"`
 	Data    interface{} `json:"data"`
@@ -15,9 +15,9 @@ type EmptyObj struct {
 }
 
 //function Build Response
-func BuildResponse(status bool, message string, data interface{}) Response {
+func BuildResponse(code int, message string, data interface{}) Response {
 	res := Response{
-		Status:  status,
+		Code:    code,
 		Message: message,
 		Error:   nil,
 		Data:    data,
@@ -26,10 +26,10 @@ func BuildResponse(status bool, message string, data interface{}) Response {
 }
 
 //function if the response is error
-func BuildErrorResponse(message string, err string, data interface{}) Response {
+func BuildErrorResponse(code int, message string, err string, data interface{}) Response {
 	splittedError := strings.Split(err, "\n")
 	res := Response{
-		Status:  false,
+		Code:    code,
 		Message: message,
 		Error:   splittedError,
 		Data:    data,

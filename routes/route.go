@@ -7,6 +7,7 @@ import (
 	"github.com/devnura/pre-tets-devnura/handler"
 	"github.com/devnura/pre-tets-devnura/repository"
 	"github.com/devnura/pre-tets-devnura/service"
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -19,8 +20,12 @@ func SetupLogger(e *echo.Echo) {
 func SetupMiddleware(e *echo.Echo) {
 	// global or root middleware
 	e.Use(middleware.RequestID())
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
+
 }
 
 func SetupRoute(e *echo.Echo) {
@@ -35,11 +40,12 @@ func SetupRoute(e *echo.Echo) {
 	// service
 	var (
 		authService = service.NewAuthService(userRepo)
+		jwtService  = service.NewJWTService()
 	)
 
 	// handler
 	var (
-		authHandler = handler.NewAuthHandler(authService)
+		authHandler = handler.NewAuthHandler(authService, jwtService)
 	)
 
 	e.GET("/", func(c echo.Context) error {
@@ -47,6 +53,15 @@ func SetupRoute(e *echo.Echo) {
 	})
 
 	g := e.Group("/api/v1/auth")
+
+	g.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		Claims:     &jwt.StandardClaims{},
+		SigningKey: []byte("secret"),
+	}))
+
 	g.POST("/login", authHandler.Login)
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 }
