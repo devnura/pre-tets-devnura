@@ -21,6 +21,19 @@ func NewUserHandler(service service.UserService) *UserHandler {
 	}
 }
 
+// Login godoc
+// @Summary Provole
+// @Description Provole
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @param register body LoginDTO true "request body login"
+// @Success 200 {object} LoginResponseDOC
+// @Failure 400 {object} res.ErrorResponse
+// @Failure 404 {object} res.ErrorResponse
+// @Failure 500 {object} res.ErrorResponse
+// @Router /auth/login [post]
+
 func (handler *UserHandler) Profile(ctx echo.Context) (err error) {
 	// c.Request().Header
 	var userDTO dto.UserDTO
