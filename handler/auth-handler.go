@@ -30,6 +30,18 @@ func NewAuthHandler(service service.AuthService, jwtService service.JWTService) 
 	}
 }
 
+// Login godoc
+// @Summary Login accounts
+// @Description Login accounts
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @param register body LoginDTO true "request body login"
+// @Success 200 {object} LoginResponseDOC
+// @Failure 400 {object} res.ErrorResponse
+// @Failure 404 {object} res.ErrorResponse
+// @Failure 500 {object} res.ErrorResponse
+// @Router /auth/login [post]
 func (c *AuthHandler) Login(ctx echo.Context) (err error) {
 	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
