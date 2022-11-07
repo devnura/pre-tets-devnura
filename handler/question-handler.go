@@ -128,5 +128,91 @@ func (c *QuestionHandler) Insert(ctx echo.Context) (err error) {
 	result := c.questionService.Insert(questionCreateDTO)
 	response := helper.BuildResponse(http.StatusCreated, "Created", result)
 	return ctx.JSON(http.StatusCreated, response)
+}
+
+// Question godoc
+// @Summary Update Question By ID
+// @Description Update Question By ID
+// @Tags question
+// @Accept  json
+// @Produce  json
+// @Param        id    path      int     true  "Id Question"
+// @param register body dto.QuestionRequestDTO true "request body insert question"
+// @Security  Bearer
+// @Security   JWT
+// @Success 200 {object} helper.Response
+// @Failure 400 {object} helper.Response
+// @Failure 401 {object} helper.Response
+// @Failure 500 {object} helper.Response
+// @Router /question/{id} [put]
+func (c *QuestionHandler) Update(ctx echo.Context) (err error) {
+	var questionUpdateDTO dto.QuestionUpdateDTO
+	errDTO := ctx.Bind(&questionUpdateDTO)
+	if errDTO != nil {
+		response := helper.BuildErrorResponse(http.StatusBadRequest, "Failed to process request", errDTO.Error(), []helper.EmptyObj{})
+		return ctx.JSON(http.StatusBadRequest, response)
+
+	}
+
+	user := ctx.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["user_id"].(string)
+
+	questionID, err := strconv.ParseUint(ctx.Param("id"), 0, 64)
+	if err == nil {
+		questionUpdateDTO.ID = questionID
+	}
+
+	if !c.questionService.IsAllowedToEdit(userID, questionUpdateDTO.ID) {
+		res := helper.BuildErrorResponse(http.StatusUnauthorized, "You dont have permission", "You are not the owner", helper.EmptyObj{})
+		return ctx.JSON(http.StatusForbidden, res)
+	}
+
+	id, errID := strconv.ParseUint(userID, 10, 64)
+	if errID == nil {
+		questionUpdateDTO.UserID = id
+	}
+	result := c.questionService.Update(questionUpdateDTO)
+	response := helper.BuildResponse(http.StatusOK, "OK!", result)
+
+	return ctx.JSON(http.StatusOK, response)
+
+}
+
+// Question godoc
+// @Summary Delete Question By ID
+// @Description Delete Question By ID
+// @Tags question
+// @Accept  json
+// @Produce  json
+// @Param        id    path      int     true  "Id Question"
+// @Security  Bearer
+// @Security   JWT
+// @Success 200 {object} helper.Response
+// @Failure 400 {object} helper.Response
+// @Failure 401 {object} helper.Response
+// @Failure 500 {object} helper.Response
+// @Router /question/{id} [delete]
+func (c *QuestionHandler) Delete(ctx echo.Context) (err error) {
+	var question entity.Question
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+
+	if err != nil {
+		res := helper.BuildErrorResponse(http.StatusBadRequest, "Failed to get param ID", "Please insert param ID", helper.EmptyObj{})
+		ctx.JSON(http.StatusBadRequest, res)
+	}
+
+	user := ctx.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["user_id"].(string)
+
+	if !c.questionService.IsAllowedToEdit(userID, id) {
+		res := helper.BuildErrorResponse(http.StatusUnauthorized, "You dont have permission", "You are not the owner", helper.EmptyObj{})
+		return ctx.JSON(http.StatusForbidden, res)
+	}
+
+	c.questionService.Delete(question)
+	response := helper.BuildResponse(http.StatusOK, "OK!", helper.EmptyObj{})
+	return ctx.JSON(http.StatusOK, response)
 
 }
