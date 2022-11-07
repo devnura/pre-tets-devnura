@@ -32,7 +32,7 @@ func NewAuthHandler(service service.AuthService, jwtService service.JWTService) 
 
 // Login godoc
 // @Summary Login user
-// @Description Login user
+// @Description Login user email : admin@gmail.com password : "admin", email : admin2@gmail.com password : "admin"
 // @Tags auth
 // @Accept  json
 // @Produce  json

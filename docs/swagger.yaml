@@ -1,5 +1,15 @@
 basePath: /api/v1
 definitions:
+  dto.AnswerRequestDTO:
+    properties:
+      answer:
+        type: string
+      questionId:
+        type: integer
+    required:
+    - answer
+    - questionId
+    type: object
   dto.LoginDTO:
     properties:
       email:
@@ -40,11 +50,190 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /answer:
+    get:
+      consumes:
+      - application/json
+      description: Answer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Answer
+      tags:
+      - answer
+    post:
+      consumes:
+      - application/json
+      description: Answer Insert
+      parameters:
+      - description: request body insert question
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Answer Insert
+      tags:
+      - answer
+  /answer/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Answer By ID
+      parameters:
+      - description: Id Answer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Delete Answer By ID
+      tags:
+      - answer
+    get:
+      consumes:
+      - application/json
+      description: Answer By ID
+      parameters:
+      - description: Id Answer
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Answer By ID
+      tags:
+      - answer
+    put:
+      consumes:
+      - application/json
+      description: Update Answwer By ID
+      parameters:
+      - description: Id Answer
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: request body insert answer
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.QuestionRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Update Answwer By ID
+      tags:
+      - answer
   /login:
     post:
       consumes:
       - application/json
-      description: Login user
+      description: 'Login user email : admin@gmail.com password : "admin", email :
+        admin2@gmail.com password : "admin"'
       parameters:
       - description: request body login
         in: body
@@ -171,6 +360,41 @@ paths:
       tags:
       - question
   /question/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Question By ID
+      parameters:
+      - description: Id Question
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Delete Question By ID
+      tags:
+      - question
     get:
       consumes:
       - application/json
@@ -204,6 +428,47 @@ paths:
       - Bearer: []
       - JWT: []
       summary: Question By ID
+      tags:
+      - question
+    put:
+      consumes:
+      - application/json
+      description: Update Question By ID
+      parameters:
+      - description: Id Question
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: request body insert question
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.QuestionRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Update Question By ID
       tags:
       - question
 securityDefinitions:

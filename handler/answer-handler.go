@@ -77,10 +77,10 @@ func (c *AnswerHandler) FindAnswerById(ctx echo.Context) (err error) {
 	return ctx.JSON(http.StatusOK, res)
 }
 
-// Question godoc
-// @Summary Question Insert
-// @Description Question Insert
-// @Tags question
+// Answer godoc
+// @Summary Answer Insert
+// @Description Answer Insert
+// @Tags answer
 // @Accept  json
 // @Produce  json
 // @param register body dto.AnswerRequestDTO true "request body insert question"

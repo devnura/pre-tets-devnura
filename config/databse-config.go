@@ -68,12 +68,12 @@ func NewMysqlDB() *gorm.DB {
 }
 
 func seedData(db *gorm.DB) {
+	db.Where("1 = 1").Delete(&entity.User{})
+	db.Where("1 = 1").Delete(&entity.Answer{})
+	db.Where("1 = 1").Delete(&entity.Question{})
 
-	// db.Where("1 = 1").Delete(&repository.Role{})
-	// db.Where("1 = 1").Delete(&repository.User{})
-
-	// db.Create(&repository.User{Username: "tirmizee", Password: "123", Email: "tirmizee@hotmail.com", FirstName: "pratya", LastName: "yeekhaday"})
-	// db.Create(&repository.User{Username: "kiskdifw", Password: "123", Email: "kiskdifw@hotmail.com", FirstName: "poikue", LastName: "poiloipuy"})
-	// db.Create(&repository.Role{Code: "R001", Name: "admin", Desc: "admin"})
-	// db.Create(&repository.Role{Code: "R002", Name: "user", Desc: "user"})
+	db.Create(&entity.User{Name: "Admin", Email: "admin@gmail.com", Password: "$2b$10$vqAX8n/aE7HTOnVD9r3ogeu4nT8eOf94jEZLBmNUc74wlrJhId7CW"})
+	db.Create(&entity.User{Name: "Admin Dua", Email: "admin2@gmail.com", Password: "$2b$10$vqAX8n/aE7HTOnVD9r3ogeu4nT8eOf94jEZLBmNUc74wlrJhId7CW"})
+	db.Create(&entity.Question{Question: "Kamu Nanya ?", UserID: 1})
+	db.Create(&entity.Answer{Answer: "Nih Ya Aku kasih Tau", UserID: 1, QuestionID: 1})
 }
