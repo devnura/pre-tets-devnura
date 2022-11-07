@@ -471,6 +471,42 @@ paths:
       summary: Update Question By ID
       tags:
       - question
+  /question/answer/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Answer By ID Question
+      parameters:
+      - description: Id Question
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.Response'
+      security:
+      - Bearer: []
+      - JWT: []
+      summary: Get Answer ID Question
+      tags:
+      - question
 securityDefinitions:
   JWT:
     in: header

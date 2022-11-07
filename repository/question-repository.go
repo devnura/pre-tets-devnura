@@ -11,6 +11,7 @@ type QuestionRepository interface {
 	InsertQuestion(b entity.Question) entity.Question
 	UpdateQuestion(b entity.Question) entity.Question
 	DeleteQuestion(b entity.Question, questionID uint64)
+	FindAnswer(questionID uint64) []entity.Answer
 }
 
 type questionConnection struct {
@@ -25,8 +26,14 @@ func NewQuestionRepository(db *gorm.DB) QuestionRepository {
 
 func (db *questionConnection) FindById(questionID uint64) entity.Question {
 	var question entity.Question
-	db.connection.Preload("Answer").Preload("Answer.Question").Find(&question, questionID)
+	db.connection.Find(&question, questionID)
 	return question
+}
+
+func (db *questionConnection) FindAnswer(questionID uint64) []entity.Answer {
+	var answer []entity.Answer
+	db.connection.Find(&answer, questionID)
+	return answer
 }
 
 func (db *questionConnection) AllQuestion() []entity.Question {

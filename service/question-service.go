@@ -17,6 +17,7 @@ type QuestionService interface {
 	All() []entity.Question
 	FindById(QuestionID uint64) entity.Question
 	IsAllowedToEdit(userID string, questionID uint64) bool
+	FindAnswer(questionID uint64) []entity.Answer
 }
 
 type questionService struct {
@@ -55,6 +56,10 @@ func (service *questionService) Delete(b entity.Question, questionID uint64) {
 
 func (service *questionService) All() []entity.Question {
 	return service.questionRepository.AllQuestion()
+}
+
+func (service *questionService) FindAnswer(questionID uint64) []entity.Answer {
+	return service.questionRepository.FindAnswer(questionID)
 }
 
 func (service *questionService) FindById(questionID uint64) entity.Question {

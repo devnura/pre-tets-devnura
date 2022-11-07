@@ -77,6 +77,32 @@ func (c *QuestionHandler) FindById(ctx echo.Context) (err error) {
 	return ctx.JSON(http.StatusOK, res)
 }
 
+// @Summary Get Answer ID Question
+// @Description Get Answer By ID Question
+// @Tags question
+// @Accept  json
+// @Produce  json
+// @Param        id    path      int     true  "Id Question"
+// @Security  Bearer
+// @Security   JWT
+// @Success 200 {object} helper.Response
+// @Failure 400 {object} helper.Response
+// @Failure 401 {object} helper.Response
+// @Failure 500 {object} helper.Response
+// @Router /question/answer/{id} [get]
+func (c *QuestionHandler) FindAnswer(ctx echo.Context) (err error) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 0, 0)
+	if err != nil {
+		response := helper.BuildErrorResponse(http.StatusBadRequest, "Failed to process request", "", []helper.EmptyObj{})
+		return ctx.JSON(http.StatusBadRequest, response)
+	}
+
+	var question []entity.Answer = c.questionService.FindAnswer(id)
+	response := helper.BuildResponse(http.StatusOK, "OK!", question)
+
+	return ctx.JSON(http.StatusOK, response)
+}
+
 // Question godoc
 // @Summary Question Insert
 // @Description Question Insert

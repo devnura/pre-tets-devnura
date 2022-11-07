@@ -80,7 +80,8 @@ func SetupRoute(e *echo.Echo) {
 		v1.POST("/question", questionHandler.Insert, _middleware.IsLoggedIn)
 		v1.GET("/question", questionHandler.All, _middleware.IsLoggedIn)
 		v1.GET("/question/:id", questionHandler.FindById, _middleware.IsLoggedIn)
-		v1.PUT("/question/:id", questionHandler.Update, _middleware.IsLoggedIn)
+		v1.GET("/question/:id", questionHandler.FindAnswer, _middleware.IsLoggedIn)
+		v1.PUT("/question/answer/:id", questionHandler.Update, _middleware.IsLoggedIn)
 		v1.DELETE("/question/:id", questionHandler.Delete, _middleware.IsLoggedIn)
 
 		v1.POST("/answer", answerHandler.InsertAnswer, _middleware.IsLoggedIn)

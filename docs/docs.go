@@ -519,6 +519,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/question/answer/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    },
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get Answer By ID Question",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "question"
+                ],
+                "summary": "Get Answer ID Question",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id Question",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helper.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/helper.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/helper.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/question/{id}": {
             "get": {
                 "security": [
