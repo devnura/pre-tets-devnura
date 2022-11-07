@@ -195,8 +195,8 @@ func (c *QuestionHandler) Update(ctx echo.Context) (err error) {
 // @Router /question/{id} [delete]
 func (c *QuestionHandler) Delete(ctx echo.Context) (err error) {
 	var question entity.Question
-	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
 
+	questionID, err := strconv.ParseUint(ctx.Param("id"), 0, 64)
 	if err != nil {
 		res := helper.BuildErrorResponse(http.StatusBadRequest, "Failed to get param ID", "Please insert param ID", helper.EmptyObj{})
 		ctx.JSON(http.StatusBadRequest, res)
@@ -206,8 +206,8 @@ func (c *QuestionHandler) Delete(ctx echo.Context) (err error) {
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["user_id"].(string)
 
-	if c.questionService.IsAllowedToEdit(userID, id) {
-		c.questionService.Delete(question)
+	if c.questionService.IsAllowedToEdit(userID, questionID) {
+		c.questionService.Delete(question, questionID)
 		response := helper.BuildResponse(http.StatusOK, "OK!", helper.EmptyObj{})
 		return ctx.JSON(http.StatusOK, response)
 	} else {

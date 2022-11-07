@@ -13,7 +13,7 @@ import (
 type QuestionService interface {
 	Insert(b dto.QuestionCreateDTO) entity.Question
 	Update(b dto.QuestionUpdateDTO) entity.Question
-	Delete(b entity.Question)
+	Delete(b entity.Question, questionID uint64)
 	All() []entity.Question
 	FindById(QuestionID uint64) entity.Question
 	IsAllowedToEdit(userID string, questionID uint64) bool
@@ -49,8 +49,8 @@ func (service *questionService) Update(b dto.QuestionUpdateDTO) entity.Question 
 	return res
 }
 
-func (service *questionService) Delete(b entity.Question) {
-	service.questionRepository.DeleteQuestion(b)
+func (service *questionService) Delete(b entity.Question, questionID uint64) {
+	service.questionRepository.DeleteQuestion(b, questionID)
 }
 
 func (service *questionService) All() []entity.Question {
@@ -64,5 +64,6 @@ func (service *questionService) FindById(questionID uint64) entity.Question {
 func (service *questionService) IsAllowedToEdit(UserID string, questionID uint64) bool {
 	b := service.questionRepository.FindById(questionID)
 	id := fmt.Sprintf("%v", b.UserID)
+	log.Printf("%s == %s", UserID, id)
 	return UserID == id
 }
