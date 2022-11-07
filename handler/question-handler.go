@@ -163,19 +163,19 @@ func (c *QuestionHandler) Update(ctx echo.Context) (err error) {
 		questionUpdateDTO.ID = questionID
 	}
 
-	if !c.questionService.IsAllowedToEdit(userID, questionUpdateDTO.ID) {
+	if c.questionService.IsAllowedToEdit(userID, questionUpdateDTO.ID) {
+		id, errID := strconv.ParseUint(userID, 10, 64)
+		if errID == nil {
+			questionUpdateDTO.UserID = id
+		}
+		result := c.questionService.Update(questionUpdateDTO)
+		response := helper.BuildResponse(http.StatusOK, "OK!", result)
+
+		return ctx.JSON(http.StatusOK, response)
+	} else {
 		res := helper.BuildErrorResponse(http.StatusUnauthorized, "You dont have permission", "You are not the owner", helper.EmptyObj{})
 		return ctx.JSON(http.StatusForbidden, res)
 	}
-
-	id, errID := strconv.ParseUint(userID, 10, 64)
-	if errID == nil {
-		questionUpdateDTO.UserID = id
-	}
-	result := c.questionService.Update(questionUpdateDTO)
-	response := helper.BuildResponse(http.StatusOK, "OK!", result)
-
-	return ctx.JSON(http.StatusOK, response)
 
 }
 
@@ -206,13 +206,12 @@ func (c *QuestionHandler) Delete(ctx echo.Context) (err error) {
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["user_id"].(string)
 
-	if !c.questionService.IsAllowedToEdit(userID, id) {
+	if c.questionService.IsAllowedToEdit(userID, id) {
+		c.questionService.Delete(question)
+		response := helper.BuildResponse(http.StatusOK, "OK!", helper.EmptyObj{})
+		return ctx.JSON(http.StatusOK, response)
+	} else {
 		res := helper.BuildErrorResponse(http.StatusUnauthorized, "You dont have permission", "You are not the owner", helper.EmptyObj{})
 		return ctx.JSON(http.StatusForbidden, res)
 	}
-
-	c.questionService.Delete(question)
-	response := helper.BuildResponse(http.StatusOK, "OK!", helper.EmptyObj{})
-	return ctx.JSON(http.StatusOK, response)
-
 }

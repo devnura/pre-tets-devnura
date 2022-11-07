@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -56,13 +57,12 @@ func NewMysqlDB() *gorm.DB {
 	}
 
 	// migrate table
-	db.AutoMigrate(
-		&entity.User{},
-		&entity.Answer{},
-		&entity.Question{},
-	)
-
-	seedData(db)
+	if err = db.AutoMigrate(&entity.User{}, &entity.Answer{}, &entity.Question{}); err == nil && db.Migrator().HasTable(&entity.User{}) {
+		if err := db.First(&entity.User{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			//Insert seed data
+			seedData(db)
+		}
+	}
 
 	return db
 }

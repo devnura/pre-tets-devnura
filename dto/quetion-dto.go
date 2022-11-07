@@ -2,7 +2,7 @@ package dto
 
 type QuestionUpdateDTO struct {
 	ID       uint64 `json:"id" form:"id"`
-	Question string `json:"question" validate:"required,email"`
+	Question string `json:"question" validate:"required"`
 	UserID   uint64 `json:"userId" validate:"required"`
 }
 
